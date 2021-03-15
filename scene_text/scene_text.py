@@ -18,10 +18,11 @@ import numpy as np
 from flask import Flask
 from flask import request
 from flask import render_template
+import os
 
 
 app = Flask(__name__)
-UPLOAD_FOLDER = "/home/vision/Downloads/sunu"
+UPLOAD_FOLDER = os.getcwd()
 DEVICE = "cpu"
 MODEL = None
 
@@ -84,14 +85,11 @@ def upload_predict():
                 UPLOAD_FOLDER,
                 image_file.filename
             )
-            image_file.save(image_location)
+            #image_file.save(image_location)
             pred = predict(image_location)
             return render_template("index.html", prediction=pred, image_loc=image_file.filename)
     return render_template("index.html", prediction=0, image_loc=None)
 
 
 if __name__ == "__main__":
-    #MODEL = SEResNext50_32x4d(pretrained=None)
-    #MODEL.load_state_dict(torch.load("model.bin", map_location=torch.device(DEVICE)))
-    #MODEL.to(DEVICE)
     app.run(host="0.0.0.0", port=12000, debug=True)
